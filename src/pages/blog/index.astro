@@ -1,0 +1,51 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostMeta from "../../components/PostMeta.astro";
+import { siteConfig } from "../../config/site";
+import { getPostPath, RSS_PATH } from "../../config/urls";
+import { getPublishedPosts } from "../../content/posts";
+
+const posts = await getPublishedPosts();
+---
+
+<BaseLayout
+  title={siteConfig.blog.title}
+  description={siteConfig.blog.description}
+>
+  <header class="page-intro page-intro--compact page-shell">
+    <h1>Blog</h1>
+    <p class="blog-intro__summary">
+      <span>
+        Writing on developer tools, infrastructure, API design, and reliability.
+      </span>
+      <a class="text-link" href={RSS_PATH}>RSS</a>
+    </p>
+  </header>
+
+  <section class="page-section page-shell" aria-label="Published posts">
+    {
+      posts.length > 0 ? (
+        <ol class="post-list">
+          {posts.map((post) => (
+            <li>
+              <article>
+                <PostMeta date={post.data.date} tags={post.data.tags} />
+                <div class="post-list__copy">
+                  <h2>
+                    <a href={getPostPath(post.data.slug)}>{post.data.title}</a>
+                  </h2>
+                  <p>{post.data.description}</p>
+                </div>
+              </article>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <div class="empty-state empty-state--large">
+          <p>No published posts yet.</p>
+          <span>New writing will appear here.</span>
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>

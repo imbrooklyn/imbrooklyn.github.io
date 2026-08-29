@@ -1,0 +1,48 @@
+---
+import {
+  formatPostDate,
+  formatPostDateAttribute,
+  hasMeaningfulUpdate,
+} from "../content/date";
+
+interface Props {
+  date: Date;
+  showPublishedLabel?: boolean;
+  showUpdated?: boolean;
+  tags: readonly string[];
+  updated?: Date;
+}
+
+const {
+  date,
+  showPublishedLabel = false,
+  showUpdated = false,
+  tags,
+  updated,
+} = Astro.props;
+const displayUpdated =
+  showUpdated && hasMeaningfulUpdate(date, updated) ? updated : undefined;
+---
+
+<div class="post-meta">
+  <p class="post-meta__dates">
+    {showPublishedLabel && <span>Published </span>}
+    <time datetime={formatPostDateAttribute(date)}>{formatPostDate(date)}</time>
+    {
+      displayUpdated && (
+        <span class="post-meta__updated">
+          Updated <time datetime={formatPostDateAttribute(displayUpdated)}>
+            {formatPostDate(displayUpdated)}
+          </time>
+        </span>
+      )
+    }
+  </p>
+  {
+    tags.length > 0 && (
+      <ul class="post-tags" aria-label="Tags">
+        {tags.map((tag) => <li>#{tag}</li>)}
+      </ul>
+    )
+  }
+</div>

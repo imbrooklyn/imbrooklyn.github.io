@@ -1,0 +1,12 @@
+---
+import { siteConfig } from "../config/site";
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner page-shell">
+    <p>{siteConfig.name} <span aria-hidden="true">·</span> {siteConfig.role}</p>
+    <a href={siteConfig.githubUrl}>
+      GitHub <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</footer>

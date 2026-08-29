@@ -1,0 +1,38 @@
+---
+import { focusAreas, siteConfig } from "../../config/site";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title={`About — ${siteConfig.name}`}
+  description={siteConfig.description}
+>
+  <header class="page-intro page-intro--compact page-shell">
+    <h1>About</h1>
+    <p>
+      I am Brooklyn Yu, a software engineer focused on developer tools,
+      infrastructure, API design, and reliability.
+    </p>
+  </header>
+
+  <section class="about-section page-shell" aria-labelledby="about-focus-title">
+    <div class="section-heading">
+      <p class="eyebrow">Areas of focus</p>
+      <h2 id="about-focus-title">Technical interests</h2>
+    </div>
+    <ul class="focus-list" aria-label="Technical interests">
+      {focusAreas.map((area) => <li>{area}</li>)}
+    </ul>
+  </section>
+
+  <section class="about-links page-shell" aria-labelledby="about-links-title">
+    <div>
+      <p class="eyebrow">Elsewhere</p>
+      <h2 id="about-links-title">Code and writing</h2>
+    </div>
+    <div class="link-group">
+      <a class="button button--primary" href={siteConfig.githubUrl}>GitHub</a>
+      <a class="button" href="/blog/">Read the blog</a>
+    </div>
+  </section>
+</BaseLayout>

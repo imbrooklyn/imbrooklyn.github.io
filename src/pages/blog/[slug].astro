@@ -1,0 +1,72 @@
+---
+import { getImage, Image } from "astro:assets";
+import { render } from "astro:content";
+import PostMeta from "../../components/PostMeta.astro";
+import { siteConfig } from "../../config/site";
+import { hasMeaningfulUpdate } from "../../content/date";
+import { getPublishedPosts, type PublishedPost } from "../../content/posts";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+interface Props {
+  post: PublishedPost;
+}
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const coverImage = post.data.cover
+  ? await getImage({ src: post.data.cover.src })
+  : undefined;
+const modifiedTime = hasMeaningfulUpdate(post.data.date, post.data.updated)
+  ? post.data.updated
+  : undefined;
+---
+
+<BaseLayout
+  title={`${post.data.title} — ${siteConfig.name}`}
+  socialTitle={post.data.title}
+  description={post.data.description}
+  article={{
+    publishedTime: post.data.date,
+    modifiedTime,
+    tags: post.data.tags,
+  }}
+  socialImage={coverImage && post.data.cover
+    ? { src: coverImage.src, alt: post.data.cover.alt }
+    : undefined}
+>
+  <article class="post reading-shell">
+    <header class="post__header">
+      <a class="post__back" href="/blog/">
+        <span aria-hidden="true">←</span> Blog
+      </a>
+      <h1>{post.data.title}</h1>
+      <p class="post__description">{post.data.description}</p>
+      <PostMeta
+        date={post.data.date}
+        updated={post.data.updated}
+        tags={post.data.tags}
+        showPublishedLabel
+        showUpdated
+      />
+    </header>
+    {
+      post.data.cover && (
+        <div class="post-cover">
+          <Image src={post.data.cover.src} alt={post.data.cover.alt} />
+        </div>
+      )
+    }
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

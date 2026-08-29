@@ -1,0 +1,47 @@
+---
+import type { Project } from "../data/projects";
+
+interface Props {
+  headingLevel?: 2 | 3;
+  items: readonly Project[];
+}
+
+const { headingLevel = 2, items } = Astro.props;
+---
+
+<ol class="project-list">
+  {
+    items.map((project, index) => (
+      <li>
+        <a class="project-item" href={project.url}>
+          <span class="project-item__number" aria-hidden="true">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <span class="project-item__content">
+            {headingLevel === 2 ? (
+              <h2>{project.name}</h2>
+            ) : (
+              <h3>{project.name}</h3>
+            )}
+            {project.description && <span>{project.description}</span>}
+          </span>
+          <span class="project-item__destination">
+            <span class="visually-hidden">Open {project.name} on GitHub</span>
+            <svg
+              aria-hidden="true"
+              focusable="false"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M7 17 17 7M17 7H7M17 7v10"></path>
+            </svg>
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ol>

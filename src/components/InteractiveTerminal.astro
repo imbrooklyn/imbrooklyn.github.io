@@ -1,0 +1,321 @@
+---
+import { focusAreas, siteConfig } from "../config/site";
+import { getPostPath } from "../config/urls";
+import { getPublishedPosts } from "../content/posts";
+import { featuredProjects } from "../data/projects";
+
+const recentPosts = (await getPublishedPosts()).slice(0, 3);
+
+const commands = [
+  { name: "about", description: "About me" },
+  { name: "projects", description: "Selected projects" },
+  { name: "experience", description: "Work experience" },
+  { name: "blog", description: "Recent writing" },
+  { name: "github", description: "Open GitHub" },
+] as const;
+---
+
+<div class="terminal-launcher" data-terminal-root>
+  <button
+    class="button button--terminal"
+    type="button"
+    aria-haspopup="dialog"
+    data-terminal-open
+  >
+    <span aria-hidden="true">$</span>
+    open terminal
+  </button>
+
+  <dialog
+    class="terminal-dialog"
+    aria-labelledby="terminal-title"
+    aria-describedby="terminal-hint"
+    data-terminal-dialog
+  >
+    <div class="terminal-window">
+      <header class="terminal-window__bar">
+        <span class="terminal-window__status" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <p id="terminal-title">yu@portfolio:~</p>
+        <button
+          class="terminal-window__close"
+          type="button"
+          aria-label="Close terminal"
+          data-terminal-close
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </header>
+
+      <div class="terminal-session">
+        <div
+          class="terminal-history"
+          aria-live="polite"
+          aria-atomic="false"
+          data-terminal-history
+        >
+          <p class="terminal-command">
+            <span>yu@portfolio:~$</span> help
+          </p>
+          <dl class="terminal-help">
+            {
+              commands.map((command) => (
+                <div>
+                  <dt>{command.name}</dt>
+                  <dd>{command.description}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+
+        <form class="terminal-form" autocomplete="off" data-terminal-form>
+          <label class="visually-hidden" for="terminal-command">
+            Terminal command
+          </label>
+          <span aria-hidden="true">yu@portfolio:~$</span>
+          <input
+            id="terminal-command"
+            name="command"
+            type="text"
+            inputmode="text"
+            autocapitalize="none"
+            autocomplete="off"
+            spellcheck="false"
+            data-terminal-input
+          />
+        </form>
+      </div>
+
+      <p class="terminal-hint" id="terminal-hint">
+        Type <code>help</code> for commands. Use <code>clear</code> to reset or
+        {" "}<code>exit</code> to close.
+      </p>
+    </div>
+
+    <template data-terminal-help>
+      <dl class="terminal-help">
+        {
+          commands.map((command) => (
+            <div>
+              <dt>{command.name}</dt>
+              <dd>{command.description}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </template>
+
+    <template data-terminal-response="about">
+      <div class="terminal-response__body">
+        <p>{siteConfig.description}</p>
+        <p class="terminal-response__meta">{focusAreas.join(" · ")}</p>
+        <a href="/about/">Read the full profile <span aria-hidden="true">→</span></a>
+      </div>
+    </template>
+
+    <template data-terminal-response="projects">
+      <ol class="terminal-response__list">
+        {
+          featuredProjects.map((project) => (
+            <li>
+              <a href={project.url} target="_blank" rel="noopener noreferrer">
+                {project.name} <span aria-hidden="true">↗</span>
+              </a>
+              {project.description && <span>{project.description}</span>}
+            </li>
+          ))
+        }
+      </ol>
+      <a class="terminal-response__more" href="/projects/">
+        View all projects <span aria-hidden="true">→</span>
+      </a>
+    </template>
+
+    <template data-terminal-response="experience">
+      <div class="terminal-response__body">
+        <p>Work experience is not published on this site yet.</p>
+      </div>
+    </template>
+
+    <template data-terminal-response="blog">
+      {
+        recentPosts.length > 0 ? (
+          <ol class="terminal-response__list">
+            {recentPosts.map((post) => (
+              <li>
+                <a href={getPostPath(post.data.slug)}>{post.data.title}</a>
+                <span>{post.data.description}</span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <div class="terminal-response__body">
+            <p>No published posts yet.</p>
+          </div>
+        )
+      }
+      <a class="terminal-response__more" href="/blog/">
+        Open the blog index <span aria-hidden="true">→</span>
+      </a>
+    </template>
+
+    <template data-terminal-response="github">
+      <div class="terminal-response__body">
+        <p>GitHub profile</p>
+        <a href={siteConfig.githubUrl} target="_blank" rel="noopener noreferrer">
+          github.com/imbrooklyn <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </template>
+  </dialog>
+</div>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-terminal-root]")
+    .forEach((root) => {
+      const openButton = root.querySelector<HTMLButtonElement>(
+        "[data-terminal-open]",
+      );
+      const dialog = root.querySelector<HTMLDialogElement>(
+        "[data-terminal-dialog]",
+      );
+      const closeButton = root.querySelector<HTMLButtonElement>(
+        "[data-terminal-close]",
+      );
+      const form = root.querySelector<HTMLFormElement>("[data-terminal-form]");
+      const input = root.querySelector<HTMLInputElement>(
+        "[data-terminal-input]",
+      );
+      const history = root.querySelector<HTMLElement>(
+        "[data-terminal-history]",
+      );
+      const helpTemplate = root.querySelector<HTMLTemplateElement>(
+        "[data-terminal-help]",
+      );
+      const responseTemplates = new Map(
+        Array.from(
+          root.querySelectorAll<HTMLTemplateElement>(
+            "[data-terminal-response]",
+          ),
+        ).map((template) => [template.dataset.terminalResponse, template]),
+      );
+
+      if (
+        !openButton ||
+        !dialog ||
+        !closeButton ||
+        !form ||
+        !input ||
+        !history ||
+        !helpTemplate
+      ) {
+        return;
+      }
+
+      const scrollToLatest = () => {
+        history.scrollTop = history.scrollHeight;
+      };
+
+      const appendCommand = (command: string) => {
+        const line = document.createElement("p");
+        const prompt = document.createElement("span");
+
+        line.className = "terminal-command";
+        prompt.textContent = "yu@portfolio:~$";
+        line.append(prompt, document.createTextNode(` ${command}`));
+        history.append(line);
+      };
+
+      const appendMessage = (message: string, isError = false) => {
+        const line = document.createElement("p");
+
+        line.className = isError
+          ? "terminal-message terminal-message--error"
+          : "terminal-message";
+        line.textContent = message;
+        history.append(line);
+        scrollToLatest();
+      };
+
+      const appendHelp = () => {
+        history.append(helpTemplate.content.cloneNode(true));
+        scrollToLatest();
+      };
+
+      const appendResponse = (command: string) => {
+        const template = responseTemplates.get(command);
+
+        if (!template) {
+          return false;
+        }
+
+        const response = document.createElement("div");
+        response.className = "terminal-response";
+        response.append(template.content.cloneNode(true));
+        history.append(response);
+        scrollToLatest();
+        return true;
+      };
+
+      const runCommand = (rawCommand: string) => {
+        const command = rawCommand.trim().toLowerCase();
+
+        if (!command) {
+          return;
+        }
+
+        if (command === "clear") {
+          history.replaceChildren();
+          return;
+        }
+
+        appendCommand(command);
+
+        if (command === "help" || command === "?") {
+          appendHelp();
+          return;
+        }
+
+        if (command === "exit") {
+          dialog.close();
+          return;
+        }
+
+        if (appendResponse(command)) {
+          return;
+        }
+
+        appendMessage(
+          `Command not found: ${command}. Type 'help' to list commands.`,
+          true,
+        );
+      };
+
+      openButton.addEventListener("click", () => {
+        if (!dialog.open) {
+          dialog.showModal();
+        }
+        input.focus();
+      });
+
+      closeButton.addEventListener("click", () => dialog.close());
+
+      dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) {
+          dialog.close();
+        }
+      });
+
+      dialog.addEventListener("close", () => openButton.focus());
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        runCommand(input.value);
+        input.value = "";
+        input.focus();
+      });
+    });
+</script>

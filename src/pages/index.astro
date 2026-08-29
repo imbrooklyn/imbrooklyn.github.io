@@ -1,0 +1,120 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import InteractiveTerminal from "../components/InteractiveTerminal.astro";
+import ProjectList from "../components/ProjectList.astro";
+import { focusAreas, siteConfig } from "../config/site";
+import { getPostPath } from "../config/urls";
+import { getPublishedPosts } from "../content/posts";
+import {
+  formatPostDate,
+  formatPostDateAttribute,
+} from "../content/date";
+import { featuredProjects } from "../data/projects";
+
+const posts = await getPublishedPosts();
+const latestPost = posts[0];
+---
+
+<BaseLayout
+  title={`${siteConfig.name} — ${siteConfig.role}`}
+  description={siteConfig.description}
+>
+  <section class="portfolio-hero" aria-labelledby="home-title">
+    <div class="portfolio-hero__grid" aria-hidden="true"></div>
+    <div class="portfolio-hero__inner page-shell">
+      <div class="portfolio-hero__copy">
+        <p class="portfolio-hero__greeting">Hello!</p>
+        <h1 id="home-title">
+          I'm <span>{siteConfig.name}</span>
+        </h1>
+        <p class="portfolio-hero__role">{siteConfig.role}</p>
+        <p class="portfolio-hero__lede">{siteConfig.description}</p>
+      </div>
+      <div class="portfolio-hero__footer">
+        <nav class="portfolio-hero__links" aria-label="Home page links">
+          <a href={siteConfig.githubUrl} target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          <a href="/projects/">Projects</a>
+          <a href="/blog/">Blog</a>
+        </nav>
+        <InteractiveTerminal />
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="home-section home-section--split page-shell"
+    aria-labelledby="about-title"
+  >
+    <div class="home-section__heading">
+      <h2 id="about-title">About Me</h2>
+      <span class="home-section__rule" aria-hidden="true"></span>
+    </div>
+    <div class="home-section__content home-about">
+      <p class="home-about__lede">
+        Clear interfaces for complex systems, with a focus on tooling that is
+        dependable in everyday engineering work.
+      </p>
+      <ul class="focus-list" aria-label="Areas of focus">
+        {focusAreas.map((area) => <li>{area}</li>)}
+      </ul>
+      <a class="text-link text-link--standalone" href="/about/">
+        More about me <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section
+    class="home-section home-section--split page-shell"
+    aria-labelledby="projects-title"
+  >
+    <div class="home-section__heading">
+      <h2 id="projects-title">Projects</h2>
+      <span class="home-section__rule" aria-hidden="true"></span>
+    </div>
+    <div class="home-section__content">
+      <ProjectList items={featuredProjects} headingLevel={3} />
+      <a class="text-link text-link--standalone" href="/projects/">
+        View all projects <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <section
+    class="home-section home-section--split page-shell"
+    aria-labelledby="writing-title"
+  >
+    <div class="home-section__heading">
+      <h2 id="writing-title">Writing</h2>
+      <span class="home-section__rule" aria-hidden="true"></span>
+    </div>
+    <div class="home-section__content">
+      {
+        latestPost ? (
+          <article class="latest-post">
+            <div>
+              <time datetime={formatPostDateAttribute(latestPost.data.date)}>
+                {formatPostDate(latestPost.data.date)}
+              </time>
+              <h3>
+                <a href={getPostPath(latestPost.data.slug)}>
+                  {latestPost.data.title}
+                </a>
+              </h3>
+            </div>
+            <p>{latestPost.data.description}</p>
+          </article>
+        ) : (
+          <div class="empty-state">
+            <p>No published posts yet.</p>
+            <span>New writing will appear here.</span>
+          </div>
+        )
+      }
+      <a class="text-link text-link--standalone" href="/blog/">
+        Visit the blog <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,56 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * *"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout website
+        uses: actions/checkout@v7
+        with:
+          path: imbrooklyn.github.io
+
+      - name: Checkout blog
+        uses: actions/checkout@v7
+        with:
+          repository: imbrooklyn/blog
+          path: blog
+
+      - name: Record blog revision
+        working-directory: blog
+        run: git rev-parse HEAD
+
+      - name: Validate, build, and upload site
+        uses: withastro/action@v6
+        with:
+          path: imbrooklyn.github.io
+          build-cmd: pnpm ci:build
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

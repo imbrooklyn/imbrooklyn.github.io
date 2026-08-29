@@ -1,0 +1,22 @@
+---
+import ProjectList from "../../components/ProjectList.astro";
+import { siteConfig } from "../../config/site";
+import { projects } from "../../data/projects";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title={`Projects — ${siteConfig.name}`}
+  description="Public software projects by Brooklyn Yu."
+>
+  <header class="page-intro page-intro--compact page-shell">
+    <h1>Projects</h1>
+    <p>
+      Repositories across developer tools, infrastructure, Go, and Kubernetes.
+    </p>
+  </header>
+
+  <section class="page-section page-shell" aria-label="Public projects">
+    <ProjectList items={projects} />
+  </section>
+</BaseLayout>
