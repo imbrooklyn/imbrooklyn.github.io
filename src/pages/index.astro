@@ -23,7 +23,9 @@ const latestPost = posts[0];
     <div class="portfolio-hero__grid" aria-hidden="true"></div>
     <div class="portfolio-hero__inner page-shell">
       <div class="portfolio-hero__copy">
-        <p class="portfolio-hero__greeting">Hello!</p>
+        <p class="portfolio-hero__greeting">
+          Hello! <span class="emoji-accent" aria-hidden="true">👋</span>
+        </p>
         <h1 id="home-title">
           I'm <span>{siteConfig.name}</span>
         </h1>
@@ -48,13 +50,17 @@ const latestPost = posts[0];
     aria-labelledby="about-title"
   >
     <div class="home-section__heading">
-      <h2 id="about-title">About Me</h2>
+      <h2 id="about-title">
+        About Me <span class="emoji-accent" aria-hidden="true">🧑‍💻</span>
+      </h2>
       <span class="home-section__rule" aria-hidden="true"></span>
     </div>
     <div class="home-section__content home-about">
       <p class="home-about__lede">
-        Clear interfaces for complex systems, with a focus on tooling that is
-        dependable in everyday engineering work.
+        I build developer platforms and IT operations infrastructure, from
+        CI/CD and artifact workflows to Kubernetes, Microsoft Active Directory,
+        virtualization, and storage. I focus on clear interfaces, reliable
+        operations, and systems that are easier to evolve.
       </p>
       <ul class="focus-list" aria-label="Areas of focus">
         {focusAreas.map((area) => <li>{area}</li>)}
@@ -70,7 +76,9 @@ const latestPost = posts[0];
     aria-labelledby="projects-title"
   >
     <div class="home-section__heading">
-      <h2 id="projects-title">Projects</h2>
+      <h2 id="projects-title">
+        Projects <span class="emoji-accent" aria-hidden="true">🛠️</span>
+      </h2>
       <span class="home-section__rule" aria-hidden="true"></span>
     </div>
     <div class="home-section__content">
@@ -86,7 +94,9 @@ const latestPost = posts[0];
     aria-labelledby="writing-title"
   >
     <div class="home-section__heading">
-      <h2 id="writing-title">Writing</h2>
+      <h2 id="writing-title">
+        Writing <span class="emoji-accent" aria-hidden="true">✍️</span>
+      </h2>
       <span class="home-section__rule" aria-hidden="true"></span>
     </div>
     <div class="home-section__content">
