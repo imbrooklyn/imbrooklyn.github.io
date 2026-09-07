@@ -9,7 +9,7 @@ export interface Book {
 
 export const books = [
   {
-    title: "Understanding Large Language Models",
+    title: "Understanding Large Language Models from the Ground Up",
     titleZh: "理解大语言模型",
     description:
       "A bilingual, from-the-ground-up guide to how modern LLMs are built, run, evaluated, and turned into reliable systems.",
