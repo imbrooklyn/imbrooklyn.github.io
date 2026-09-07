@@ -6,7 +6,7 @@ const blogDescription =
   "Notes on software engineering, developer tools, and infrastructure.";
 
 export const siteConfig = {
-  url: "https://imbrooklyn.github.io",
+  url: "https://imbrooklyn.dev",
   name: siteName,
   role: siteRole,
   description: siteDescription,
