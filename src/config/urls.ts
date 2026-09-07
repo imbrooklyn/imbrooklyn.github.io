@@ -1,6 +1,8 @@
 export const RSS_PATH = "/rss.xml";
 export const ROBOTS_PATH = "/robots.txt";
 export const SITEMAP_INDEX_PATH = "/sitemap-index.xml";
+export const UNDERSTANDING_LLMS_SITEMAP_PATH =
+  "/books/understanding-llms/sitemap-index.xml";
 
 export function requireSiteUrl(site: URL | undefined): URL {
   if (!site) {

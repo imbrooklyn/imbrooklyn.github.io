@@ -12,6 +12,7 @@
     "build": "tsx scripts/validate-content.ts && astro sync --force && astro build",
     "check": "tsx scripts/validate-content.ts && astro sync --force && astro check",
     "ci:build": "pnpm validate:content && pnpm check && pnpm build",
+    "compose:site": "node scripts/compose-site.mjs",
     "validate:content": "tsx scripts/validate-content.ts"
   },
   "dependencies": {

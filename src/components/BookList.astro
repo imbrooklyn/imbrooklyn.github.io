@@ -1,0 +1,40 @@
+---
+import type { Book } from "../data/books";
+
+interface Props {
+  headingLevel?: 2 | 3;
+  items: readonly Book[];
+}
+
+const { headingLevel = 2, items } = Astro.props;
+---
+
+<ol class="book-list">
+  {
+    items.map((book) => (
+      <li>
+        <a class="book-item" href={book.href}>
+          <span class="book-item__topline">
+            <span>Web book</span>
+            <span class="book-item__status">{book.status}</span>
+          </span>
+          <span class="book-item__content">
+            {headingLevel === 2 ? (
+              <h2>{book.title}</h2>
+            ) : (
+              <h3>{book.title}</h3>
+            )}
+            <span class="book-item__title-zh" lang="zh-CN">
+              {book.titleZh}
+            </span>
+            <span class="book-item__description">{book.description}</span>
+          </span>
+          <span class="book-item__footer">
+            <span>{book.languages.join(" · ")}</span>
+            <span class="book-item__destination" aria-hidden="true">Read →</span>
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ol>

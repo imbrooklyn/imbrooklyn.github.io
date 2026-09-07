@@ -33,15 +33,61 @@ jobs:
           repository: imbrooklyn/blog
           path: blog
 
+      - name: Checkout Understanding LLMs
+        uses: actions/checkout@v7
+        with:
+          repository: imbrooklyn/understanding-llms
+          path: understanding-llms
+
       - name: Record blog revision
         working-directory: blog
         run: git rev-parse HEAD
 
-      - name: Validate, build, and upload site
-        uses: withastro/action@v6
+      - name: Record book revision
+        working-directory: understanding-llms
+        run: git rev-parse HEAD
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v5
         with:
-          path: imbrooklyn.github.io
-          build-cmd: pnpm ci:build
+          version: 11.24.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: |
+            imbrooklyn.github.io/pnpm-lock.yaml
+            understanding-llms/pnpm-lock.yaml
+
+      - name: Install website dependencies
+        working-directory: imbrooklyn.github.io
+        run: pnpm install --frozen-lockfile
+
+      - name: Install book dependencies
+        working-directory: understanding-llms
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate and build website
+        working-directory: imbrooklyn.github.io
+        run: pnpm ci:build
+
+      - name: Validate and build book
+        working-directory: understanding-llms
+        run: pnpm ci:build
+
+      - name: Compose Pages artifact
+        working-directory: imbrooklyn.github.io
+        run: pnpm compose:site
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: imbrooklyn.github.io/dist
 
   deploy:
     name: Deploy to GitHub Pages

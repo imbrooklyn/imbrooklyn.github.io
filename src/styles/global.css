@@ -869,6 +869,104 @@ h3 {
   list-style: none;
 }
 
+.book-list {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-4);
+  list-style: none;
+}
+
+.book-item {
+  min-height: 18rem;
+  padding: clamp(1.5rem, 3.5vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-7);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-terminal-text);
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgb(143 168 255 / 24%),
+      transparent 42%
+    ),
+    linear-gradient(var(--color-hero-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-hero-grid) 1px, transparent 1px),
+    var(--color-terminal-bg);
+  background-size: auto, 5rem 5rem, 5rem 5rem, auto;
+  box-shadow: var(--shadow-terminal);
+  text-decoration: none;
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.book-item:hover {
+  color: var(--color-terminal-text);
+  border-color: var(--color-terminal-prompt);
+  transform: translateY(-0.2rem);
+}
+
+.book-item__topline,
+.book-item__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  color: var(--color-terminal-caption);
+  font-size: 0.75rem;
+  font-weight: 620;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.book-item__status {
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--color-terminal-border);
+  border-radius: 999px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.book-item__content {
+  max-width: 56rem;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.book-item h2,
+.book-item h3 {
+  max-width: 28ch;
+  margin: 0;
+  color: var(--color-terminal-text);
+  font-size: clamp(1.55rem, 3.5vw, 2.65rem);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+
+.book-item__title-zh {
+  color: var(--color-terminal-prompt);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 620;
+}
+
+.book-item__description {
+  max-width: 55ch;
+  color: var(--color-terminal-muted);
+  line-height: 1.7;
+}
+
+.book-item__destination {
+  color: var(--color-terminal-text);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .project-item {
   position: relative;
   min-width: 0;

@@ -1,0 +1,22 @@
+---
+import BookList from "../../components/BookList.astro";
+import { siteConfig } from "../../config/site";
+import { books } from "../../data/books";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title={`Books — ${siteConfig.name}`}
+  description="Open, web-first technical books by Brooklyn Yu."
+>
+  <header class="page-intro page-intro--compact page-shell">
+    <h1>Books</h1>
+    <p>
+      Open, web-first books about the systems behind modern software and AI.
+    </p>
+  </header>
+
+  <section class="page-section page-shell" aria-label="Published books">
+    <BookList items={books} />
+  </section>
+</BaseLayout>
