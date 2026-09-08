@@ -9,10 +9,12 @@
   },
   "scripts": {
     "dev": "tsx scripts/validate-content.ts && astro sync --force && astro dev",
+    "dev:book": "pnpm --dir ../understanding-llms exec astro dev --host 127.0.0.1 --port 4322",
     "build": "tsx scripts/validate-content.ts && astro sync --force && astro build",
     "check": "tsx scripts/validate-content.ts && astro sync --force && astro check",
     "ci:build": "pnpm validate:content && pnpm check && pnpm build",
     "compose:site": "node scripts/compose-site.mjs",
+    "preview:site": "pnpm --dir ../understanding-llms ci:build && pnpm ci:build && pnpm compose:site && astro preview --host 127.0.0.1 --port 4321",
     "validate:content": "tsx scripts/validate-content.ts"
   },
   "dependencies": {

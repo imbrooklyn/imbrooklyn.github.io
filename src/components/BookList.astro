@@ -12,8 +12,8 @@ const { headingLevel = 2, items } = Astro.props;
 <ol class="book-list">
   {
     items.map((book) => (
-      <li>
-        <a class="book-item" href={book.href}>
+      <li class="book-item">
+        <a class="book-item__primary" href={book.href}>
           <span class="book-item__topline">
             <span>Web book</span>
             <span class="book-item__status">{book.status}</span>
@@ -29,11 +29,18 @@ const { headingLevel = 2, items } = Astro.props;
             </span>
             <span class="book-item__description">{book.description}</span>
           </span>
-          <span class="book-item__footer">
-            <span>{book.languages.join(" · ")}</span>
-            <span class="book-item__destination" aria-hidden="true">Read →</span>
-          </span>
         </a>
+        <span class="book-item__footer">
+          <span class="book-item__languages" aria-label="Available languages">
+            {book.languages.map((language, index) => (
+              <>
+                {index > 0 && <span aria-hidden="true"> · </span>}
+                <a href={language.href} lang={language.lang}>{language.label}</a>
+              </>
+            ))}
+          </span>
+          <a class="book-item__destination" href={book.href}>Read →</a>
+        </span>
       </li>
     ))
   }

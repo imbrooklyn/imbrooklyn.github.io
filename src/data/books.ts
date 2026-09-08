@@ -1,11 +1,21 @@
 export interface Book {
   description: string;
   href: string;
-  languages: readonly string[];
+  languages: readonly BookLanguage[];
   status: string;
   title: string;
   titleZh: string;
 }
+
+export interface BookLanguage {
+  href: string;
+  label: string;
+  lang: string;
+}
+
+const bookDevBase = "http://localhost:4322/books/understanding-llms";
+const bookBase = "/books/understanding-llms";
+const localizedBookBase = import.meta.env.DEV ? bookDevBase : bookBase;
 
 export const books = [
   {
@@ -15,7 +25,18 @@ export const books = [
       "A bilingual, from-the-ground-up guide to how modern LLMs are built, run, evaluated, and turned into reliable systems.",
     href: "/books/understanding-llms/",
     status: "In progress",
-    languages: ["简体中文", "English"],
+    languages: [
+      {
+        label: "简体中文",
+        lang: "zh-CN",
+        href: `${localizedBookBase}/zh-hans/`,
+      },
+      {
+        label: "English",
+        lang: "en",
+        href: `${localizedBookBase}/en/`,
+      },
+    ],
   },
 ] as const satisfies readonly Book[];
 

@@ -11,6 +11,18 @@ pnpm install
 pnpm dev
 ```
 
+The main development server does not build sibling repositories by itself. To develop the main site and Book together, keep the main server running on `4321` and start the Book server on `4322` in a second terminal:
+
+```sh
+pnpm dev:book
+```
+
+The main site's Book entry bridges to the Book development server. To preview the exact combined production artifact with one process, stop both development servers and run:
+
+```sh
+pnpm preview:site
+```
+
 Use `BLOG_CONTENT_DIR` only when the blog repository is stored elsewhere. Relative overrides are resolved from this repository root.
 
 ```sh
@@ -20,6 +32,8 @@ BLOG_CONTENT_DIR=/absolute/path/to/blog pnpm dev
 ## Commands
 
 - `pnpm dev` validates content, then starts Astro development mode.
+- `pnpm dev:book` starts the sibling Starlight development server on port `4322`, including draft chapters.
+- `pnpm preview:site` builds both repositories, composes the final artifact, and previews it locally.
 - `pnpm build` validates content, then creates the static site.
 - `pnpm check` validates content and runs Astro's TypeScript checks.
 - `pnpm validate:content` validates Markdown frontmatter, heading structure, and local image references in `posts/` and `drafts/`.
